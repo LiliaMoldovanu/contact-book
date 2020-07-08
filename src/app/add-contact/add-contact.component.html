@@ -1,1 +1,80 @@
-<p>add-contact works!</p>
+<form (ngSubmit)="onSubmit(f)" #f="ngForm">
+  <div class="form-container">
+    <h3>Add Contact</h3>
+    <div class="form-group">
+      <label for="first-name">First Name</label>
+      <input
+        type="text"
+        name="first-name"
+        id="first-name"
+        ngModel
+        required
+        #firstName="ngModel"
+      />
+      <span class="help-block" *ngIf="!firstName.valid && firstName.touched"
+        >Please enter first name!</span
+      >
+    </div>
+    <div class="form-group">
+      <label for="last-name">Last Name</label>
+      <input
+        type="text"
+        name="last-name"
+        id="last-name"
+        ngModel
+        required
+        #lastName="ngModel"
+      />
+      <span class="help-block" *ngIf="!lastName.valid && lastName.touched"
+        >Please enter last name!</span
+      >
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        name="email"
+        id="email"
+        ngModel
+        email
+        required
+        #email="ngModel"
+      />
+      <span class="help-block" *ngIf="!email.valid && email.touched"
+        >Please enter a valid email!</span
+      >
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone</label>
+      <input
+        type="tel"
+        name="phone"
+        id="phone"
+        ngModel
+        required
+        #phone="ngModel"
+      />
+      <span class="help-block" *ngIf="!phone.valid && phone.touched"
+        >Please enter a phone number!</span
+      >
+    </div>
+    <div class="form-group">
+      <label for="avatar" class="custom-file-upload">
+        <input
+          type="file"
+          id="avatar"
+          name="avatar"
+          accept="image/png, image/jpeg"
+          ngModel
+        />Add Image</label
+      >
+    </div>
+    <button
+      type="submit"
+      class="btn btn-primary btn-submit"
+      [disabled]="!f.valid"
+    >
+      Submit
+    </button>
+  </div>
+</form>
