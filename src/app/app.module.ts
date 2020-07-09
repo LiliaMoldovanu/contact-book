@@ -7,6 +7,7 @@ import { AppComponent } from "./app.component";
 import { AddContactComponent } from "./add-contact/add-contact.component";
 import { ListContactsComponent } from "./list-contacts/list-contacts.component";
 import { EditContactComponent } from "./edit-contact/edit-contact.component";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -15,7 +16,7 @@ import { EditContactComponent } from "./edit-contact/edit-contact.component";
     ListContactsComponent,
     EditContactComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
 })
