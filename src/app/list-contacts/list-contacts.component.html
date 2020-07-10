@@ -1,1 +1,23 @@
-<p>list-contacts works!</p>
+<div class="container">
+  <p *ngIf="loadedContacts.length < 1">No Contacts avalable!</p>
+  <table>
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Image</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let contact of loadedContacts">
+        <td>{{ contact["first-name"] }}</td>
+        <td>{{ contact["last-name"] }}</td>
+        <td>{{ contact.phone }}</td>
+        <td>{{ contact.email }}</td>
+        <td>{{ contact.image }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
