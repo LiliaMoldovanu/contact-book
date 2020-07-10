@@ -11,6 +11,8 @@ import { Contact } from "../contact.model";
 })
 export class ListContactsComponent implements OnInit {
   loadedContacts: Contact[] = [];
+  isFetching = false;
+  error = null;
 
   constructor(private http: HttpClient) {}
 
@@ -19,6 +21,7 @@ export class ListContactsComponent implements OnInit {
   }
 
   onFetchContacts() {
+    this.isFetching = true;
     this.http
       .get<{ [key: string]: Contact }>(
         "https://contact-book-60025.firebaseio.com/contacts.json"
@@ -34,9 +37,15 @@ export class ListContactsComponent implements OnInit {
           return contactsArray;
         })
       )
-      .subscribe((contacts) => {
-        this.loadedContacts = contacts;
-        console.log(this.loadedContacts);
-      });
+      .subscribe(
+        (contacts) => {
+          this.isFetching = false;
+          this.loadedContacts = contacts;
+          console.log(this.loadedContacts);
+        },
+        (error) => {
+          this.error = error.message;
+        }
+      );
   }
 }

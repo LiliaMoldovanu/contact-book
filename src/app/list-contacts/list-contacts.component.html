@@ -1,8 +1,14 @@
 <div class="container">
-  <p *ngIf="loadedContacts.length < 1">No Contacts avalable!</p>
-  <table>
+  <p *ngIf="loadedContacts.length < 1 && !isFetching">No Contacts avalable!</p>
+  <p *ngIf="isFetching && !error">Loading...</p>
+  <div class="alert alert-danger" *ngIf="error">
+    <h1>An error occured!</h1>
+    <p>{{ error }}</p>
+  </div>
+  <table *ngIf="loadedContacts.length >= 1">
     <thead>
       <tr>
+        <th></th>
         <th>First Name</th>
         <th>Last Name</th>
         <th>Phone</th>
@@ -11,7 +17,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let contact of loadedContacts">
+      <tr *ngFor="let contact of loadedContacts; let i = index">
+        <td>{{ i + 1 }}</td>
         <td>{{ contact["first-name"] }}</td>
         <td>{{ contact["last-name"] }}</td>
         <td>{{ contact.phone }}</td>
