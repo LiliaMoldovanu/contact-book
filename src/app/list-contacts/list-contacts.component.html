@@ -71,87 +71,96 @@
       </tr>
     </tbody>
   </table>
-  <form *ngIf="editMode" (ngSubmit)="onSubmit(f.value)" #f="ngForm">
-    <div class="form-container">
-      <h3>Edit Contact</h3>
-      <div class="form-group">
-        <label for="first-name">First Name</label>
-        <input
-          type="text"
-          name="first-name"
-          id="first-name"
-          [ngModel]="editContact['first-name']"
-          required
-          #firstName="ngModel"
-        />
-        <span class="help-block" *ngIf="!firstName.valid && firstName.touched"
-          >Please enter first name!</span
-        >
-      </div>
-      <div class="form-group">
-        <label for="last-name">Last Name</label>
-        <input
-          value="hello"
-          type="text"
-          name="last-name"
-          id="last-name"
-          ngModel
-          required
-          #lastName="ngModel"
-        />
-        <span class="help-block" *ngIf="!lastName.valid && lastName.touched"
-          >Please enter last name!</span
-        >
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          ngModel
-          email
-          required
-          #email="ngModel"
-        />
-        <span class="help-block" *ngIf="!email.valid && email.touched"
-          >Please enter a valid email!</span
-        >
-      </div>
-      <div class="form-group">
-        <label for="phone">Phone</label>
-        <input
-          type="tel"
-          name="phone"
-          id="phone"
-          ngModel
-          required
-          #phone="ngModel"
-        />
-        <span class="help-block" *ngIf="!phone.valid && phone.touched"
-          >Please enter a phone number!</span
-        >
-      </div>
-      <div class="form-group">
-        <label for="avatar" class="custom-file-upload">
+  <div class="edit-container" *ngIf="editMode">
+    <form (ngSubmit)="onSubmit(f.value)" #f="ngForm">
+      <div class="form-container">
+        <h3>Edit Contact</h3>
+        <div class="form-group">
+          <label for="first-name">First Name</label>
           <input
-            #avatar
-            type="file"
-            id="avatar"
-            name="image"
-            accept="image/png,
-          image/jpeg"
-            ngModel
-          />Add Image</label
+            type="text"
+            name="first-name"
+            id="first-name"
+            [ngModel]="editContact['first-name']"
+            required
+            #firstName="ngModel"
+          />
+          <span class="help-block" *ngIf="!firstName.valid && firstName.touched"
+            >Please enter first name!</span
+          >
+        </div>
+        <div class="form-group">
+          <label for="last-name">Last Name</label>
+          <input
+            type="text"
+            name="last-name"
+            id="last-name"
+            [ngModel]="editContact['last-name']"
+            required
+            #lastName="ngModel"
+          />
+          <span class="help-block" *ngIf="!lastName.valid && lastName.touched"
+            >Please enter last name!</span
+          >
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            [ngModel]="editContact['email']"
+            email
+            required
+            #email="ngModel"
+          />
+          <span class="help-block" *ngIf="!email.valid && email.touched"
+            >Please enter a valid email!</span
+          >
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input
+            type="tel"
+            name="phone"
+            id="phone"
+            [ngModel]="editContact['phone']"
+            required
+            #phone="ngModel"
+          />
+          <span class="help-block" *ngIf="!phone.valid && phone.touched"
+            >Please enter a phone number!</span
+          >
+        </div>
+        <div class="form-group">
+          <label for="avatar" class="custom-file-upload">
+            <input
+              #avatar
+              type="file"
+              id="avatar"
+              name="image"
+              accept="image/png,
+            image/jpeg"
+              ngModel
+              (change)="onChangeImage($event)"
+            />Change Image</label
+          >
+        </div>
+        <img
+          [src]="isChangingImage ? changedImage : editContact.image"
+          alt="avatar"
+        />
+        <button
+          type="submit"
+          class="btn btn-primary btn-submit"
+          [disabled]="!f.valid"
         >
+          Submit
+        </button>
+        <button class="btn btn-danger" type="button" (click)="onCancel()">
+          Cancel
+        </button>
       </div>
-      <button
-        type="submit"
-        class="btn btn-primary btn-submit"
-        [disabled]="!f.valid"
-      >
-        Submit
-      </button>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>

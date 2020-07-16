@@ -20,6 +20,8 @@ export class ListContactsComponent implements OnInit {
   editMode = false;
   editContact: Contact;
   editContactId: string;
+  changedImage: any;
+  isChangingImage = false;
 
   constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
 
@@ -67,9 +69,6 @@ export class ListContactsComponent implements OnInit {
   }
 
   onDeleteContact(id, index) {
-    // console.log(
-    //   "https://contact-book-60025.firebaseio.com/contacts/" + id + ".json"
-    // );
     this.http
       .delete(
         "https://contact-book-60025.firebaseio.com/contacts/" + id + ".json"
@@ -83,43 +82,64 @@ export class ListContactsComponent implements OnInit {
     this.editMode = true;
     this.editContact = this.loadedContacts[index];
     this.editContactId = id;
-    console.log(this.editContact["first-name"]);
+  }
+
+  onChangeImage(element) {
+    this.isChangingImage = true;
+    var file = element.target.files[0];
+    var reader = new FileReader();
+    reader.onloadend = (e) => {
+      this.changedImage = reader.result;
+    };
+    reader.readAsDataURL(file);
   }
 
   onSubmit(editedContactData: Contact) {
     console.log(editedContactData);
 
-    var file = this.imageInput.nativeElement.files[0];
-    var reader = new FileReader();
-
-    const http = this.http;
-
-    reader.onloadend = function () {
-      console.log("RESULT", reader.result);
-
-      editedContactData.image = reader.result;
-
-      http
+    if (editedContactData.image === "") {
+      editedContactData.image = this.editContact.image[
+        "changingThisBreaksApplicationSecurity"
+      ];
+      this.http
         .put(
           "https://contact-book-60025.firebaseio.com/contacts/" +
-            editedContactData.id +
+            this.editContactId +
             ".json",
           editedContactData
         )
         .subscribe((responseData) => {
           console.log(responseData);
+          this.onFetchContacts();
         });
-    };
-    //   http
-    //     .post<{ name: string }>(
-    //       "https://contact-book-60025.firebaseio.com/contacts.json",
-    //       contactData
-    //     )
-    //     .subscribe((responseData) => {
-    //       console.log(responseData);
-    //     });
-    // };
-    reader.readAsDataURL(file);
-    this.signupForm.reset();
+    } else {
+      var file = this.imageInput.nativeElement.files[0];
+      console.log(file);
+      var reader = new FileReader();
+
+      const http = this.http;
+      const id = this.editContactId;
+
+      reader.onloadend = function () {
+        editedContactData.image = reader.result;
+
+        http
+          .put(
+            "https://contact-book-60025.firebaseio.com/contacts/" +
+              id +
+              ".json",
+            editedContactData
+          )
+          .subscribe((responseData) => {
+            console.log(responseData);
+          });
+      };
+      reader.readAsDataURL(file);
+    }
+    this.editMode = false;
+  }
+
+  onCancel() {
+    this.editMode = false;
   }
 }
