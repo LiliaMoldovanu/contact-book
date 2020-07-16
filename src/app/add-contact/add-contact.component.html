@@ -5,6 +5,7 @@
       <label for="first-name">First Name</label>
       <input
         type="text"
+        value="kljk"
         name="first-name"
         id="first-name"
         ngModel
@@ -61,10 +62,13 @@
     <div class="form-group">
       <label for="avatar" class="custom-file-upload">
         <input
+          #avatar
           type="file"
           id="avatar"
-          name="avatar"
-          accept="image/png, image/jpeg"
+          name="image"
+          accept="image/png,
+        image/jpeg"
+          (change)="encodeImageFileAsURL($event)"
           ngModel
         />Add Image</label
       >
@@ -77,4 +81,8 @@
       Submit
     </button>
   </div>
+</form>
+<form>
+  <label for="name">NAme</label>
+  <input type="text" name="name" id="name" value="name" />
 </form>

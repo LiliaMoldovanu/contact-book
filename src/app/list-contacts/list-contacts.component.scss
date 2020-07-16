@@ -10,3 +10,19 @@ thead th {
   color: #fff;
   border-color: #fff;
 }
+
+button {
+  min-width: 30px;
+  &:hover {
+    background-color: rgb(183, 183, 183);
+  }
+}
+
+img {
+  max-width: 200px;
+  object-fit: cover;
+}
+
+tr:nth-child(even) {
+  background-color: rgb(183, 183, 183);
+}

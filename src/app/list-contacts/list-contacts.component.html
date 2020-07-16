@@ -1,4 +1,35 @@
 <div class="container">
+  <hr />
+  <div class="btn-container">
+    <button>A</button>
+    <button>B</button>
+    <button>C</button>
+    <button>D</button>
+    <button>E</button>
+    <button>F</button>
+    <button>G</button>
+    <button>H</button>
+    <button>I</button>
+    <button>J</button>
+    <button>K</button>
+    <button>L</button>
+    <button>M</button>
+    <button>N</button>
+    <button>O</button>
+    <button>P</button>
+    <button>Q</button>
+    <button>R</button>
+    <button>S</button>
+    <button>T</button>
+    <button>U</button>
+    <button>V</button>
+    <button>W</button>
+    <button>X</button>
+    <button>Y</button>
+    <button>Z</button>
+  </div>
+
+  <hr />
   <p *ngIf="loadedContacts.length < 1 && !isFetching">No Contacts avalable!</p>
   <p *ngIf="isFetching && !error">Loading...</p>
   <div class="alert alert-danger" *ngIf="error">
@@ -23,8 +54,104 @@
         <td>{{ contact["last-name"] }}</td>
         <td>{{ contact.phone }}</td>
         <td>{{ contact.email }}</td>
-        <td>{{ contact.image }}</td>
+        <td><img [src]="contact.image" alt="" class="img-responsive" /></td>
+        <td>
+          <button
+            class="btn btn-primary"
+            (click)="onEditContact(contact.id, i)"
+          >
+            Edit</button
+          ><button
+            class="btn btn-danger"
+            (click)="onDeleteContact(contact.id, i)"
+          >
+            Delete
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
+  <form *ngIf="editMode" (ngSubmit)="onSubmit(f.value)" #f="ngForm">
+    <div class="form-container">
+      <h3>Edit Contact</h3>
+      <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input
+          type="text"
+          name="first-name"
+          id="first-name"
+          [ngModel]="editContact['first-name']"
+          required
+          #firstName="ngModel"
+        />
+        <span class="help-block" *ngIf="!firstName.valid && firstName.touched"
+          >Please enter first name!</span
+        >
+      </div>
+      <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input
+          value="hello"
+          type="text"
+          name="last-name"
+          id="last-name"
+          ngModel
+          required
+          #lastName="ngModel"
+        />
+        <span class="help-block" *ngIf="!lastName.valid && lastName.touched"
+          >Please enter last name!</span
+        >
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          ngModel
+          email
+          required
+          #email="ngModel"
+        />
+        <span class="help-block" *ngIf="!email.valid && email.touched"
+          >Please enter a valid email!</span
+        >
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input
+          type="tel"
+          name="phone"
+          id="phone"
+          ngModel
+          required
+          #phone="ngModel"
+        />
+        <span class="help-block" *ngIf="!phone.valid && phone.touched"
+          >Please enter a phone number!</span
+        >
+      </div>
+      <div class="form-group">
+        <label for="avatar" class="custom-file-upload">
+          <input
+            #avatar
+            type="file"
+            id="avatar"
+            name="image"
+            accept="image/png,
+          image/jpeg"
+            ngModel
+          />Add Image</label
+        >
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary btn-submit"
+        [disabled]="!f.valid"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
 </div>

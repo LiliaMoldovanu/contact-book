@@ -3,6 +3,6 @@ export interface Contact {
   lastName: string;
   email: string;
   tel: number;
-  image: string;
+  image: string | ArrayBuffer;
   id?: string;
 }

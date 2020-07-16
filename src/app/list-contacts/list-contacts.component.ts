@@ -1,5 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { NgForm } from "@angular/forms";
+import { DomSanitizer } from "@angular/platform-browser";
 
 import { map } from "rxjs/operators";
 import { Contact } from "../contact.model";
@@ -10,11 +12,16 @@ import { Contact } from "../contact.model";
   styleUrls: ["./list-contacts.component.scss"],
 })
 export class ListContactsComponent implements OnInit {
+  @ViewChild("f") signupForm: NgForm;
+  @ViewChild("avatar") imageInput: any;
   loadedContacts: Contact[] = [];
   isFetching = false;
   error = null;
+  editMode = false;
+  editContact: Contact;
+  editContactId: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
     this.onFetchContacts();
@@ -35,6 +42,16 @@ export class ListContactsComponent implements OnInit {
             }
           }
           return contactsArray;
+        }),
+        map((contacts: Contact[]) => {
+          contacts = contacts.map((contact) => {
+            contact.image = this.sanitizer.bypassSecurityTrustResourceUrl(
+              contact.image as string
+            ) as string;
+
+            return contact;
+          });
+          return contacts;
         })
       )
       .subscribe(
@@ -47,5 +64,62 @@ export class ListContactsComponent implements OnInit {
           this.error = error.message;
         }
       );
+  }
+
+  onDeleteContact(id, index) {
+    // console.log(
+    //   "https://contact-book-60025.firebaseio.com/contacts/" + id + ".json"
+    // );
+    this.http
+      .delete(
+        "https://contact-book-60025.firebaseio.com/contacts/" + id + ".json"
+      )
+      .subscribe(() => {
+        this.loadedContacts.splice(index, 1);
+      });
+  }
+
+  onEditContact(id, index) {
+    this.editMode = true;
+    this.editContact = this.loadedContacts[index];
+    this.editContactId = id;
+    console.log(this.editContact["first-name"]);
+  }
+
+  onSubmit(editedContactData: Contact) {
+    console.log(editedContactData);
+
+    var file = this.imageInput.nativeElement.files[0];
+    var reader = new FileReader();
+
+    const http = this.http;
+
+    reader.onloadend = function () {
+      console.log("RESULT", reader.result);
+
+      editedContactData.image = reader.result;
+
+      http
+        .put(
+          "https://contact-book-60025.firebaseio.com/contacts/" +
+            editedContactData.id +
+            ".json",
+          editedContactData
+        )
+        .subscribe((responseData) => {
+          console.log(responseData);
+        });
+    };
+    //   http
+    //     .post<{ name: string }>(
+    //       "https://contact-book-60025.firebaseio.com/contacts.json",
+    //       contactData
+    //     )
+    //     .subscribe((responseData) => {
+    //       console.log(responseData);
+    //     });
+    // };
+    reader.readAsDataURL(file);
+    this.signupForm.reset();
   }
 }
