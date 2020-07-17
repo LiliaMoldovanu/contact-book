@@ -156,7 +156,8 @@
               !clearMode) ||
             (changedImage && clearMode && !clearImage) ||
             (clearMode && !clearImage) ||
-            (clearImage && !clearMode)
+            (clearImage && !clearMode) ||
+            (changedImage && !clearMode)
           "
           [src]="isChangingImage ? changedImage : editContact.image"
           alt="No image"

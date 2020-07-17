@@ -139,7 +139,6 @@ export class ListContactsComponent implements OnInit {
       this.clearImage = true;
     }
     this.clearMode = true;
-    // this.changedImage = null;
     this.isChecked = false;
   }
 
