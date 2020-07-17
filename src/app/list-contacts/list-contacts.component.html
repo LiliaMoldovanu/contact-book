@@ -132,6 +132,15 @@
             >Please enter a phone number!</span
           >
         </div>
+        <button class="btn btn-success">Clear</button>
+        <img
+          *ngIf="
+            editContact.image['changingThisBreaksApplicationSecurity'] ||
+            changedImage
+          "
+          [src]="isChangingImage ? changedImage : editContact.image"
+          alt="No image"
+        />
         <div class="form-group">
           <label for="avatar" class="custom-file-upload">
             <input
@@ -143,13 +152,15 @@
             image/jpeg"
               ngModel
               (change)="onChangeImage($event)"
-            />Change Image</label
+            />{{
+              editContact.image["changingThisBreaksApplicationSecurity"] ||
+              changedImage
+                ? "Change Image"
+                : "Add Image"
+            }}</label
           >
         </div>
-        <img
-          [src]="isChangingImage ? changedImage : editContact.image"
-          alt="avatar"
-        />
+
         <button
           type="submit"
           class="btn btn-primary btn-submit"

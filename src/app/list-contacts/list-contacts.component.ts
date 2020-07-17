@@ -82,6 +82,7 @@ export class ListContactsComponent implements OnInit {
     this.editMode = true;
     this.editContact = this.loadedContacts[index];
     this.editContactId = id;
+    console.log(this.editContact.image);
   }
 
   onChangeImage(element) {
@@ -101,42 +102,45 @@ export class ListContactsComponent implements OnInit {
       editedContactData.image = this.editContact.image[
         "changingThisBreaksApplicationSecurity"
       ];
-      this.http
-        .put(
-          "https://contact-book-60025.firebaseio.com/contacts/" +
-            this.editContactId +
-            ".json",
-          editedContactData
-        )
-        .subscribe((responseData) => {
-          console.log(responseData);
-          this.onFetchContacts();
-        });
     } else {
-      var file = this.imageInput.nativeElement.files[0];
-      console.log(file);
-      var reader = new FileReader();
-
-      const http = this.http;
-      const id = this.editContactId;
-
-      reader.onloadend = function () {
-        editedContactData.image = reader.result;
-
-        http
-          .put(
-            "https://contact-book-60025.firebaseio.com/contacts/" +
-              id +
-              ".json",
-            editedContactData
-          )
-          .subscribe((responseData) => {
-            console.log(responseData);
-          });
-      };
-      reader.readAsDataURL(file);
+      editedContactData.image = this.changedImage;
     }
+    this.http
+      .put(
+        "https://contact-book-60025.firebaseio.com/contacts/" +
+          this.editContactId +
+          ".json",
+        editedContactData
+      )
+      .subscribe((responseData) => {
+        console.log(responseData);
+        this.onFetchContacts();
+      });
+
     this.editMode = false;
+    this.isChangingImage = false;
+    // var file = this.imageInput.nativeElement.files[0];
+    // console.log(file);
+    // var reader = new FileReader();
+
+    // const http = this.http;
+    // const id = this.editContactId;
+
+    // reader.onloadend = () => {
+
+    // this.http
+    //   .put(
+    //     "https://contact-book-60025.firebaseio.com/contacts/" +
+    //       this.editContactId +
+    //       ".json",
+    //     editedContactData
+    //   )
+    //   .subscribe((responseData) => {
+    //     console.log(responseData);
+    //     this.onFetchContacts();
+    //   });
+    // };
+    // reader.readAsDataURL(file);
   }
 
   onCancel() {
