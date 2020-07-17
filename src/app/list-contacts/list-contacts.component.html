@@ -81,7 +81,7 @@
             type="text"
             name="first-name"
             id="first-name"
-            [ngModel]="editContact['first-name']"
+            [ngModel]="!clearMode ? editContact['first-name'] : ''"
             required
             #firstName="ngModel"
           />
@@ -95,7 +95,7 @@
             type="text"
             name="last-name"
             id="last-name"
-            [ngModel]="editContact['last-name']"
+            [ngModel]="!clearMode ? editContact['last-name'] : ''"
             required
             #lastName="ngModel"
           />
@@ -109,7 +109,7 @@
             type="email"
             name="email"
             id="email"
-            [ngModel]="editContact['email']"
+            [ngModel]="!clearMode ? editContact['email'] : ''"
             email
             required
             #email="ngModel"
@@ -124,7 +124,7 @@
             type="tel"
             name="phone"
             id="phone"
-            [ngModel]="editContact['phone']"
+            [ngModel]="!clearMode ? editContact['phone'] : ''"
             required
             #phone="ngModel"
           />
@@ -132,11 +132,31 @@
             >Please enter a phone number!</span
           >
         </div>
-        <button class="btn btn-success">Clear</button>
-        <img
+        <button type="button" class="btn btn-success" (click)="onClear()">
+          Clear
+        </button>
+        <div
+          class="clear-container"
           *ngIf="
             editContact.image['changingThisBreaksApplicationSecurity'] ||
-            changedImage
+            (changedImage && editMode)
+          "
+        >
+          <input
+            id="clearImage"
+            type="checkbox"
+            [checked]="isChecked"
+            (change)="onClearImage()"
+          />
+          <label for="clearImage">clear image too</label>
+        </div>
+        <img
+          *ngIf="
+            (editContact.image['changingThisBreaksApplicationSecurity'] &&
+              !clearMode) ||
+            (changedImage && clearMode && !clearImage) ||
+            (clearMode && !clearImage) ||
+            (clearImage && !clearMode)
           "
           [src]="isChangingImage ? changedImage : editContact.image"
           alt="No image"
@@ -153,8 +173,10 @@
               ngModel
               (change)="onChangeImage($event)"
             />{{
-              editContact.image["changingThisBreaksApplicationSecurity"] ||
-              changedImage
+              (editContact.image["changingThisBreaksApplicationSecurity"] &&
+                !clearMode) ||
+              (changedImage && !clearMode) ||
+              (changedImage && clearMode)
                 ? "Change Image"
                 : "Add Image"
             }}</label

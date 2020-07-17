@@ -22,6 +22,10 @@ export class ListContactsComponent implements OnInit {
   editContactId: string;
   changedImage: any;
   isChangingImage = false;
+  editContactIndex: number;
+  clearMode = false;
+  isChecked = false;
+  clearImage = false;
 
   constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
 
@@ -79,13 +83,16 @@ export class ListContactsComponent implements OnInit {
   }
 
   onEditContact(id, index) {
+    this.clearMode = false;
     this.editMode = true;
     this.editContact = this.loadedContacts[index];
     this.editContactId = id;
-    console.log(this.editContact.image);
+    this.editContactIndex = index;
+    this.clearImage = false;
   }
 
   onChangeImage(element) {
+    this.clearImage = false;
     this.isChangingImage = true;
     var file = element.target.files[0];
     var reader = new FileReader();
@@ -96,7 +103,7 @@ export class ListContactsComponent implements OnInit {
   }
 
   onSubmit(editedContactData: Contact) {
-    console.log(editedContactData);
+    // console.log(editedContactData);
 
     if (editedContactData.image === "") {
       editedContactData.image = this.editContact.image[
@@ -113,37 +120,30 @@ export class ListContactsComponent implements OnInit {
         editedContactData
       )
       .subscribe((responseData) => {
-        console.log(responseData);
         this.onFetchContacts();
       });
 
     this.editMode = false;
     this.isChangingImage = false;
-    // var file = this.imageInput.nativeElement.files[0];
-    // console.log(file);
-    // var reader = new FileReader();
-
-    // const http = this.http;
-    // const id = this.editContactId;
-
-    // reader.onloadend = () => {
-
-    // this.http
-    //   .put(
-    //     "https://contact-book-60025.firebaseio.com/contacts/" +
-    //       this.editContactId +
-    //       ".json",
-    //     editedContactData
-    //   )
-    //   .subscribe((responseData) => {
-    //     console.log(responseData);
-    //     this.onFetchContacts();
-    //   });
-    // };
-    // reader.readAsDataURL(file);
   }
 
   onCancel() {
     this.editMode = false;
+    this.changedImage = null;
+    this.isChangingImage = false;
+    this.isChecked = false;
+  }
+
+  onClear() {
+    if (this.isChecked) {
+      this.clearImage = true;
+    }
+    this.clearMode = true;
+    // this.changedImage = null;
+    this.isChecked = false;
+  }
+
+  onClearImage() {
+    this.isChecked = !this.isChecked;
   }
 }

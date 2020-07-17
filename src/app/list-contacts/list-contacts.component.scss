@@ -98,5 +98,15 @@ tr:nth-child(even) {
     .btn-submit {
       margin: auto;
     }
+
+    .clear-container {
+      margin-left: 15px;
+      font-size: 13px;
+      line-height: 15px;
+
+      input {
+        margin-right: 5px;
+      }
+    }
   }
 }
