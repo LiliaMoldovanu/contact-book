@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { NgForm } from "@angular/forms";
 import { DomSanitizer } from "@angular/platform-browser";
 
@@ -26,6 +26,34 @@ export class ListContactsComponent implements OnInit {
   clearMode = false;
   isChecked = false;
   clearImage = false;
+  letters = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+  ];
 
   constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
 
@@ -103,8 +131,6 @@ export class ListContactsComponent implements OnInit {
   }
 
   onSubmit(editedContactData: Contact) {
-    // console.log(editedContactData);
-
     if (editedContactData.image === "") {
       editedContactData.image = this.editContact.image[
         "changingThisBreaksApplicationSecurity"
@@ -144,5 +170,55 @@ export class ListContactsComponent implements OnInit {
 
   onClearImage() {
     this.isChecked = !this.isChecked;
+  }
+
+  onChooseLetter(index) {
+    this.isFetching = true;
+    let addressExtention =
+      '?orderBy="last-name"&startAt="' +
+      this.letters[index] +
+      '"&endAt="' +
+      this.letters[index] +
+      '\uf8ff"';
+    this.http
+      .get<{ [key: string]: Contact }>(
+        // 'https://contact-book-60025.firebaseio.com/contacts.json?orderBy="last-name"&startAt="h"&endAt="h\uf8ff"'
+        // prettier-ignore
+        "https://contact-book-60025.firebaseio.com/contacts.json"+addressExtention
+      )
+      .pipe(
+        map((responseData) => {
+          const contactsArray: Contact[] = [];
+          for (const key in responseData) {
+            if (responseData.hasOwnProperty(key)) {
+              contactsArray.push({ ...responseData[key], id: key });
+            }
+          }
+          return contactsArray;
+        }),
+        map((contacts: Contact[]) => {
+          contacts = contacts.map((contact) => {
+            contact.image = this.sanitizer.bypassSecurityTrustResourceUrl(
+              contact.image as string
+            ) as string;
+
+            return contact;
+          });
+          return contacts;
+        })
+      )
+      .subscribe(
+        (contacts) => {
+          this.isFetching = false;
+          this.loadedContacts = contacts;
+          console.log(this.loadedContacts);
+        },
+        (error) => {
+          this.error = error.message;
+        }
+      );
+  }
+  onGetAllContacts() {
+    this.onFetchContacts();
   }
 }

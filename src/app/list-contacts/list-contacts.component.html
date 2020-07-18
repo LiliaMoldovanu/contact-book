@@ -1,32 +1,21 @@
 <div class="container">
   <hr />
   <div class="btn-container">
-    <button>A</button>
-    <button>B</button>
-    <button>C</button>
-    <button>D</button>
-    <button>E</button>
-    <button>F</button>
-    <button>G</button>
-    <button>H</button>
-    <button>I</button>
-    <button>J</button>
-    <button>K</button>
-    <button>L</button>
-    <button>M</button>
-    <button>N</button>
-    <button>O</button>
-    <button>P</button>
-    <button>Q</button>
-    <button>R</button>
-    <button>S</button>
-    <button>T</button>
-    <button>U</button>
-    <button>V</button>
-    <button>W</button>
-    <button>X</button>
-    <button>Y</button>
-    <button>Z</button>
+    <div class="letters-container">
+      <button
+        *ngFor="let letter of letters; let i = index"
+        (click)="onChooseLetter(i)"
+      >
+        {{ letter }}
+      </button>
+    </div>
+    <button
+      class="btn btn-success"
+      id="all-contacts"
+      (click)="onGetAllContacts()"
+    >
+      All Contacts
+    </button>
   </div>
 
   <hr />
