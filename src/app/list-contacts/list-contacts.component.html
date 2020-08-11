@@ -17,6 +17,10 @@
       All Contacts
     </button>
   </div>
+  <div class="search-container">
+    <input type="text" name="search" id="search" />
+    <button class="btn btn-primary">Search</button>
+  </div>
 
   <hr />
   <p *ngIf="loadedContacts.length < 1 && !isFetching">No Contacts avalable!</p>

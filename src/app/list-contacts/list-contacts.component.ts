@@ -91,8 +91,9 @@ export class ListContactsComponent implements OnInit {
       .subscribe(
         (contacts) => {
           this.isFetching = false;
-          this.loadedContacts = contacts;
-          console.log(this.loadedContacts);
+          this.loadedContacts = contacts.sort((a, b) =>
+            a["last-name"].localeCompare(b["last-name"])
+          );
         },
         (error) => {
           this.error = error.message;
